@@ -104,7 +104,7 @@ const Register = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.email.includes('@')) {
             setErrorMessage('Invalid email format');
@@ -116,6 +116,22 @@ const Register = () => {
         }
         alert('Registration Successful!');
         setErrorMessage('');
+
+        console.log("Sending form data:", formData);
+
+        // backend part , here we are fetching data or posting data from database
+        try {
+            const response = await fetch(`http://localhost:5000/api/auth/register`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+            });
+        } 
+        catch (error) {
+            console.error(" register ", error);
+            }     
     };
 
     return (
