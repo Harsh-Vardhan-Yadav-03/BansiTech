@@ -1,87 +1,3 @@
-// import React from 'react'
-// import { useState } from "react";
-
-// const Register = () => {
-//     const [username, setUsername] = useState({
-//         username: '',
-//         email: "",
-//         phone: "",
-//         password: "",
-//     });
-
-//     const handleInput = (e) => {
-//         console.log(e);
-//         let name = e.target.name;
-//         let value = e.target.value;
-
-//         setUser({
-//             ...username,
-//             [name]: value,
-//         });
-//     };
-
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-//         console.log(username);
-//     }
-
-//     return (
-//         <>
-//             <section>
-//                 <main>
-//                     <div className="section-registration">
-//                         <div className="container grid grid-two-cols">
-//                             <div className="registration-image">
-//                             <img src="./public/images/registration-image.webp" alt="Thank you for registration" />
-//                             </div>
-//                             <div className="registration-form">
-//                                 <h1 className="main-heading mb-3">Registration Form</h1>
-//                                 <br />
-//                                 <form onSubmit={handleSubmit}>
-//                                     <div>
-//                                         <label htmlFor="username">username</label>
-//                                         <input type="text" id="username" name="username" placeholder="username" required autoComplete="off"
-//                                             value={username.username}
-//                                             onChange={handleInput}
-//                                         />
-//                                     </div>
-
-//                                     <div>
-//                                         <label htmlFor="email">email</label>
-//                                         <input type="text" id="email" name="email" placeholder="enter your email" required autoComplete="off"
-//                                             value={username.email}
-//                                             onChange={handleInput} />
-//                                     </div>
-
-//                                     <div>
-//                                         <label htmlFor="phone">phone</label>
-//                                         <input type="text" id="phone" name="phone" placeholder="enter your phone number" required autoComplete="off"
-//                                             value={username.phone}
-//                                             onChange={handleInput} />
-//                                     </div>
-
-//                                     <div>
-//                                         <label htmlFor="password">password</label>
-//                                         <input type="password" id="password" name="password" placeholder="enter password" required autoComplete="off"
-//                                             value={username.password}
-//                                             onChange={handleInput} />
-//                                     </div>
-
-//                                     <br />
-
-//                                     <button type="submit" className="btn btn-submit">Register Now</button>
-//                                 </form>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </main>
-//             </section>
-//         </>
-//     )
-// };
-
-// export default Register
-
 import React, { useState } from 'react';
 import './Register.css';
 
@@ -128,6 +44,17 @@ const Register = () => {
                     },
                     body: JSON.stringify(formData),
             });
+
+            if(response.ok){
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '' 
+                })
+            }
+
         } 
         catch (error) {
             console.error(" register ", error);
