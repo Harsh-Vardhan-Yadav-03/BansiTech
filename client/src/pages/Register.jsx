@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Register.css';
 
+const URL ="http://localhost:5000/api/auth/register";
+
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -37,7 +39,7 @@ const Register = () => {
 
         // backend part , here we are fetching data or posting data from database
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/register`,{
+            const response = await fetch( URL,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
