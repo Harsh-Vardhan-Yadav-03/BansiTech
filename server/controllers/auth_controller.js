@@ -18,13 +18,13 @@ const register = async (req, res) => {
         const username = `${firstName} ${lastName}`.trim();
 
         if (password !== confirmPassword) {
-            return res.status(400).json({ msg: "Passwords do not match" });
+            return res.status(400).json({ message: "Passwords do not match" });
         }
 
         const userExist = await User.findOne({ email });
 
         if (userExist) {
-            return res.status(400).json({ msg: "Email already exists" });
+            return res.status(400).json({ message: "Email already exists" });
         }
 
         // Hash password
@@ -43,6 +43,8 @@ const register = async (req, res) => {
     }
 };
 
+
+// User Login Logic
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -54,7 +56,11 @@ const login = async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, userExist.password);
         if (isMatch) {
-            res.status(200).json({ msg: "Login Successful" });
+            res.status(200).json({ 
+                msg: "Login Successful",
+                token: await userExist.generateToken(),
+                userId: userExist._id.toString(),
+            });
         } else {
             res.status(401).json({ message: "Invalid email or password" });
         }
@@ -63,4 +69,18 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { home, register, login };
+// To send user data = User Logic
+
+const user = async (req, res) => {
+    try {
+       const userData = req.user;
+       console.log(userData);
+       return res.status(200).json({ userData });
+
+    } catch (error) {
+        console.log(`error from the user route ${error}`);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+}
+
+module.exports = { home, register, login, user };

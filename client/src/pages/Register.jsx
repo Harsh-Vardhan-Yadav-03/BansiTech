@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './Register.css';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from '../store/auth.jsx';
+import { toast } from 'react-toastify';
+
 
 const URL ="http://localhost:5000/api/auth/register";
 
@@ -12,6 +16,10 @@ const Register = () => {
         password: '',
         confirmPassword: ''
     });
+
+    const navigate = useNavigate(); 
+    const { storeTokenInLs } = useAuth();
+
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleInput = (e) => {
@@ -43,11 +51,16 @@ const Register = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
+                },
+                body: JSON.stringify(formData),
             });
 
+            const res_data =  await response.json();
+            console.log("res from server", res_data);
+
             if(response.ok){
+                // storing  the token in localstorage
+                storeTokenInLs(res_data.token);
                 setFormData({
                     firstName: '',
                     lastName: '',
@@ -55,6 +68,10 @@ const Register = () => {
                     password: '',
                     confirmPassword: '' 
                 })
+                toast.success("Registeration Successful");
+                navigate("/login");
+            } else{
+                toast.error(res_data.extraDetails ? res_data.extraDetails : res_data.message);
             }
 
         } 

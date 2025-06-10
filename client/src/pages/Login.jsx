@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../store/auth';
+import { toast } from 'react-toastify';
 
 const URL = "http://localhost:5000/api/auth/login";
 
@@ -11,6 +13,7 @@ const Login = () => {
     });
 
     const navigate = useNavigate();
+    const { storeTokenInLs } = useAuth();
 
     const handleInput = (e) => {
         // console.log(e);
@@ -25,6 +28,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        //backend part 
         try {
              const response = await fetch( URL, {
                 method: "POST",
@@ -36,11 +40,16 @@ const Login = () => {
 
              console.log("login form" , response);
 
+             const res_data =  await response.json();
+             
+
              if( response.ok){
+                storeTokenInLs(res_data.token);
                 setUsername({ email: '', password: '',});
+                toast.success("Login Successful");
                 navigate("/");    
              }else{
-                alert("Invalid credential");
+                toast.error(res_data.extraDetails ? res_data.extraDetails : res_data.message);
                 console.log("invalid credential");
              }
 
